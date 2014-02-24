@@ -34,9 +34,9 @@ void setup() {
 
   float x, y, d;
 
-  float w_sq = 15, // container width
-        d_min = 5, // min diameter for circle
-        d_max = 16; // max diameter for circle
+  float w_sq = 10, // container width
+        d_min = 6, // min diameter for circle
+        d_max = 13; // max diameter for circle
 
   int n_w = floor(w / w_sq), // number wide
       n_h = floor(h / w_sq), // number high
@@ -50,7 +50,7 @@ void setup() {
       float[] depth_points = grid_square(depths, j, i, n_skip_w, n_skip_h);
 
       // 1. just skip over the requisite numbwer of entries
-      // depth_plot[j][i] = depth_points[0];
+      // depth_plot[j][i] = depth_points[floor(n_skip_w*n_skip_h / 2)];
       
       // 2. local min
       depth_plot[j][i] = min(depth_points);
@@ -66,28 +66,30 @@ void setup() {
   // plot
   background(255);
   smooth();
-  // strokeWeight(2);
+  color land = color(51, 117, 12);
+  color water = color(34, 47, 163);
   for (int i = 0; i < n_h; i++) {
     y = w_sq/2 + i*w_sq;
 
     for (j = 0; j < n_w; j++) {
       x = w_sq/2 + j*w_sq;
 
-      if (depth_plot[j][i] < 0) {
-        stroke(47, 21, 178);
-        fill(47, 21, 178);
+      // if the comparison is <=, 0-depth points are water; if <, 0-depth is
+      // considered land
+      if (depth_plot[j][i] <= 0) {
+        stroke(water);
+        fill(water);
         d = map(depth_plot[j][i], MIN, 0, d_max, d_min);
       } else {
-        stroke(125, 196, 123);
-        fill(125, 196, 123);
-        d = map(depth_plot[j][i], 0, MAX, d_min, d_max);
-        // d = 2;
+        stroke(land);
+        fill(land);
+        // d = map(depth_plot[j][i], 0, MAX, d_min, d_max);
+        d = 5;
       }
 
       ellipse(x, y, d, d);
     }
   }
-
 }
 
 float[] grid_square(float[][] depths, int j, int i, int n_skip_w, int n_skip_h) {
