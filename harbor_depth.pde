@@ -8,7 +8,12 @@ int MAX = 213; // maximum z value in depth_grid.csv
 
 int w = 800,
     h = 600,
-    margin = 100;
+    margin = 40;
+
+float w_sq = 7, // container width
+      d_min = .9 * w_sq, // min diameter for circle
+      d_max = 1.5 * w_sq; // max diameter for circle
+
 
 float[][] depths = new float[N_W][N_H];
 
@@ -33,10 +38,6 @@ void setup() {
   // 4. local min
 
   float x, y, d;
-
-  float w_sq = 10, // container width
-        d_min = 6, // min diameter for circle
-        d_max = 13; // max diameter for circle
 
   int n_w = floor(w / w_sq), // number wide
       n_h = floor(h / w_sq), // number high
@@ -66,8 +67,11 @@ void setup() {
   // plot
   background(255);
   smooth();
-  color land = color(51, 117, 12);
-  color water = color(34, 47, 163);
+  noStroke();
+
+  color water = color(15, 39, 120);
+  color land = color(0, 0, 0);
+
   for (int i = 0; i < n_h; i++) {
     y = w_sq/2 + i*w_sq;
 
@@ -77,19 +81,19 @@ void setup() {
       // if the comparison is <=, 0-depth points are water; if <, 0-depth is
       // considered land
       if (depth_plot[j][i] <= 0) {
-        stroke(water);
         fill(water);
         d = map(depth_plot[j][i], MIN, 0, d_max, d_min);
       } else {
-        stroke(land);
         fill(land);
-        // d = map(depth_plot[j][i], 0, MAX, d_min, d_max);
-        d = 5;
+        d = map(depth_plot[j][i], 0, MAX, d_min, d_max);
+        d = d_min - 2;
       }
 
       ellipse(x, y, d, d);
     }
   }
+
+  save("water.png");
 }
 
 float[] grid_square(float[][] depths, int j, int i, int n_skip_w, int n_skip_h) {
