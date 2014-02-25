@@ -10,11 +10,6 @@ int w = 800,
     h = 600,
     margin = 40;
 
-float w_sq = 7, // container width
-      d_min = .9 * w_sq, // min diameter for circle
-      d_max = 1.5 * w_sq; // max diameter for circle
-
-
 float[][] depths = new float[N_W][N_H];
 
 void setup() {
@@ -23,6 +18,7 @@ void setup() {
 
   Table depth_grid_tab = loadTable("depth_grid.csv", "header");
 
+  // load depths from file
   int j = 0;
   for ( TableRow row : depth_grid_tab.rows() ) {
     for (int i = 0; i < N_W; i++) {
@@ -31,13 +27,9 @@ void setup() {
     j++;
   }
 
-  // dimension reduction:
-  // 1. skip every x entries
-  // 2. local mean
-  // 3. local median
-  // 4. local min
-
-  float x, y, d;
+  float w_sq = 5, // point container width
+        d_min = .9 * w_sq, // min diameter for point
+        d_max = 1.5 * w_sq; // max diameter for point
 
   int n_w = floor(w / w_sq), // number wide
       n_h = floor(h / w_sq), // number high
@@ -46,21 +38,22 @@ void setup() {
   
   float[][] depth_plot = new float[n_w][n_h];
 
+  // calculate depth value for each point
   for (int i = 0; i < n_h; i++) {
     for (j = 0; j < n_w; j++) {
       float[] depth_points = grid_square(depths, j, i, n_skip_w, n_skip_h);
 
-      // 1. just skip over the requisite numbwer of entries
+      // 1. look at "middle" point
       // depth_plot[j][i] = depth_points[floor(n_skip_w*n_skip_h / 2)];
       
       // 2. local min
-      depth_plot[j][i] = min(depth_points);
+      // depth_plot[j][i] = min(depth_points);
 
       // 3. local mean
-      // for (int k = 0; k < depth_points.length; k++) {
-      //   depth_plot[j][i] += depth_points[k];
-      // }
-      // depth_plot[j][i] = depth_plot[j][i] / depth_points.length;
+      for (int k = 0; k < depth_points.length; k++) {
+        depth_plot[j][i] += depth_points[k];
+      }
+      depth_plot[j][i] = depth_plot[j][i] / depth_points.length;
     }
   }
 
@@ -71,6 +64,8 @@ void setup() {
 
   color water = color(15, 39, 120);
   color land = color(0, 0, 0);
+
+  float x, y, d;
 
   for (int i = 0; i < n_h; i++) {
     y = w_sq/2 + i*w_sq;
@@ -85,7 +80,7 @@ void setup() {
         d = map(depth_plot[j][i], MIN, 0, d_max, d_min);
       } else {
         fill(land);
-        d = map(depth_plot[j][i], 0, MAX, d_min, d_max);
+        // d = map(depth_plot[j][i], 0, MAX, d_min, d_max);
         d = d_min - 2;
       }
 

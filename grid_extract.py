@@ -21,7 +21,7 @@ xy = xyz[['x','y']]
 # There are 841 columns, and 601 rows. Each row is enumerated left-to-right,
 # top-to-bottom. 
 
-# Reshape z-coordinates according to 
+# Reshape z-coordinates according to grid shape
 depth_grid = xyz['z'].values.reshape(len(xy['y'].unique()), len(xy['x'].unique()))
 depth_grid = DataFrame(depth_grid)
 
