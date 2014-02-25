@@ -21,10 +21,14 @@ everything that is at sea level is land. Brooklyn is a vast and expansive
 plain, Manhattan is a land-bridge and Staten Peninsula is no island. There's
 deep water, too, right off the coast of all this land.
 
+![Land](https://raw.github.com/mhlinder/new-york-harbor/master/land.png)
+
 The problem, though, is that some of what we saw wasn't land. Because, in
 fact, some of what is at sea level is water. And when we assume that water
 will go everywhere that it can, Manhattan and Staten become islands again,
 but at the cost of the Rockaways and huge portions of SI.
+
+![Water](https://raw.github.com/mhlinder/new-york-harbor/master/water.png)
 
 No, you see, the problem is that New York Harbor has begun to press back in
 against the city so forcefully pushing out. The humanity that occupies it
